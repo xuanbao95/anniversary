@@ -314,13 +314,22 @@ export function FilmStrip({ isPaused }: FilmStripProps) {
   }, []);
 
   useEffect(() => {
+    const stage = stageRef.current;
     drawRef.current();
-    if (isPaused || reduceMotion) return;
+    if (!stage || isPaused || reduceMotion) return;
 
     let frame = 0;
     let previous: number | null = null;
+    let running = false;
+
+    const stop = () => {
+      running = false;
+      previous = null;
+      window.cancelAnimationFrame(frame);
+    };
 
     const tick = (now: number) => {
+      if (!running) return;
       if (previous != null) {
         distanceRef.current += (Math.min(now - previous, 48) / LOOP_MS) * reelRef.current.arcTotal;
       }
@@ -329,8 +338,21 @@ export function FilmStrip({ isPaused }: FilmStripProps) {
       frame = window.requestAnimationFrame(tick);
     };
 
-    frame = window.requestAnimationFrame(tick);
-    return () => window.cancelAnimationFrame(frame);
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry?.isIntersecting) {
+        if (running) return;
+        running = true;
+        previous = null;
+        frame = window.requestAnimationFrame(tick);
+        return;
+      }
+      stop();
+    });
+    observer.observe(stage);
+    return () => {
+      observer.disconnect();
+      stop();
+    };
   }, [isPaused, reduceMotion, reel, visibleW]);
 
   const viewX = (REEL_W - visibleW) / 2;

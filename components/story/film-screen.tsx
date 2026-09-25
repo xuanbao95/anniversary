@@ -22,6 +22,37 @@ function visibleHeight(node: HTMLElement) {
   return Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
 }
 
+type FooterSlot = {
+  chapterId: string;
+  setVisible: (visible: boolean) => void;
+};
+
+const footerSlots = new Set<FooterSlot>();
+let footerFrame = 0;
+
+function measureFooters() {
+  footerFrame = 0;
+  const chapters = [...document.querySelectorAll<HTMLElement>("[id^='chapter-']")];
+  let bestId = "";
+  let best = 0;
+  for (const node of chapters) {
+    const height = visibleHeight(node);
+    if (height > best) {
+      best = height;
+      bestId = node.id;
+    }
+  }
+  const active = best > 80 ? bestId : "";
+  for (const slot of footerSlots) {
+    slot.setVisible(active === `chapter-${slot.chapterId}`);
+  }
+}
+
+function onFooterScroll() {
+  if (footerFrame) return;
+  footerFrame = window.requestAnimationFrame(measureFooters);
+}
+
 export function ChapterFooter({ chapterId, cue, top }: { chapterId: string; cue: string; top: string }) {
   const [target, setTarget] = useState({ href: "#top", label: top });
   const [visible, setVisible] = useState(false);
@@ -35,24 +66,26 @@ export function ChapterFooter({ chapterId, cue, top }: { chapterId: string; cue:
     const next = chapters[index + 1];
     setTarget(next?.id ? { href: `#${next.id}`, label: cue } : { href: "#top", label: top });
 
-    const update = () => {
-      let bestId = "";
-      let best = 0;
-      for (const node of chapters) {
-        const height = visibleHeight(node);
-        if (height > best) {
-          best = height;
-          bestId = node.id;
-        }
-      }
-      setVisible(best > 80 && bestId === `chapter-${chapterId}`);
+    const slot: FooterSlot = {
+      chapterId,
+      setVisible: (nextVisible) => {
+        setVisible((current) => (current === nextVisible ? current : nextVisible));
+      },
     };
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
+    footerSlots.add(slot);
+    if (footerSlots.size === 1) {
+      window.addEventListener("scroll", onFooterScroll, { passive: true });
+      window.addEventListener("resize", onFooterScroll);
+    }
+    measureFooters();
     return () => {
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
+      footerSlots.delete(slot);
+      if (footerSlots.size === 0) {
+        window.removeEventListener("scroll", onFooterScroll);
+        window.removeEventListener("resize", onFooterScroll);
+        window.cancelAnimationFrame(footerFrame);
+        footerFrame = 0;
+      }
     };
   }, [chapterId, cue, top]);
 
