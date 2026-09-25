@@ -7,6 +7,7 @@ type RsvpModalProps = {
 export function RsvpModal({ onClose }: RsvpModalProps) {
   return (
     <div
+      data-chapter-scroll-lock=""
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md animate-[scene-rise_.3s_ease-out_both]"
       onClick={onClose}
     >

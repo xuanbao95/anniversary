@@ -10,8 +10,8 @@ export function AnniversaryWheelPage() {
   const [rsvpOpen, setRsvpOpen] = useState(false);
 
   return (
-    <div className="relative h-screen max-h-screen w-full overflow-hidden text-[#FAF6EE] selection:bg-[#B99A63] selection:text-black">
-      <div className="pointer-events-none fixed inset-0 z-0" aria-hidden>
+    <div id="top" className="chapter-screen relative h-dvh max-h-dvh w-full overflow-hidden text-[#FAF6EE] selection:bg-[#B99A63] selection:text-black">
+      <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
         <div className="absolute inset-0 bg-[#0c0a09]" />
         <div className="absolute inset-x-0 top-0 h-[58%] bg-[radial-gradient(ellipse_at_top,rgba(185,154,99,0.28),transparent_62%)]" />
         <div className="absolute inset-x-0 bottom-0 h-[48%] bg-[radial-gradient(ellipse_at_bottom,rgba(92,58,32,0.42),transparent_68%)]" />
@@ -55,8 +55,8 @@ export function AnniversaryWheelPage() {
         </div>
       </header>
 
-      <main className="relative z-20 flex min-h-0 min-w-0 flex-1 flex-col items-center justify-center gap-6 overflow-hidden py-2 sm:gap-8">
-        <div className="px-2 text-center">
+      <main className="relative z-20 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden py-2">
+        <div className="shrink-0 px-2 text-center">
           <p className="text-[10px] font-semibold tracking-[0.32em] text-[#B99A63]">
             KỶ NIỆM NGÀY CƯỚI
           </p>
@@ -71,15 +71,23 @@ export function AnniversaryWheelPage() {
           </p>
         </div>
 
-        <div className="-mx-4 min-w-0 w-[calc(100%+2rem)] sm:-mx-8 sm:w-[calc(100%+4rem)]">
-          <FilmStrip isPaused={isPaused} />
+        <div className="-mx-4 flex min-h-0 w-[calc(100%+2rem)] flex-1 items-center py-2 sm:-mx-8 sm:py-3 sm:w-[calc(100%+4rem)]">
+          <div className="film-stage">
+            <FilmStrip isPaused={isPaused} />
+          </div>
         </div>
 
-        <p className="px-4 text-center font-[family-name:var(--font-script)] text-[28px] leading-snug text-[#E0C097] sm:text-[34px]">
+        <p className="shrink-0 px-4 text-center font-[family-name:var(--font-script)] text-[clamp(22px,6vw,34px)] leading-snug text-[#E0C097]">
           &ldquo;Bốn mùa thay lá, tình ta vẫn vẹn nguyên.&rdquo;
         </p>
       </main>
 
+      <a
+        href="#chapter-01"
+        className="relative z-20 mx-auto pb-1 text-[9px] tracking-[0.32em] text-[#B99A63]/80"
+      >
+        CUỘN ĐỂ XEM CHƯƠNG 01
+      </a>
       <footer className="relative z-20 flex flex-wrap items-center justify-between gap-2 border-t border-white/10 pt-2 text-[9px] tracking-[0.18em] text-[#A69280]">
         <span>XUÂN BẢO &amp; MINH NGỌC</span>
         <span>27 / 11 / 2022 — 27 / 11 / 2026</span>
