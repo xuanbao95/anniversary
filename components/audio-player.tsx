@@ -102,14 +102,13 @@ export function AudioPlayer() {
         onError={() => setUnavailable(true)}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
-        autoPlay
       />
       <button
         type="button"
         data-audio-toggle=""
         onClick={toggle}
         disabled={unavailable}
-        className="flex items-center gap-2 rounded-full border border-[#B99A63]/30 bg-[#171615]/80 px-3.5 py-1.5 text-[9px] font-medium tracking-[0.16em] text-[#E8DCC9] backdrop-blur-sm transition-all hover:border-[#B99A63] hover:text-[#B99A63] disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-[#B99A63]/30 bg-[#171615]/80 px-3.5 py-1.5 text-[9px] font-medium tracking-[0.16em] text-[#E8DCC9] backdrop-blur-sm transition-all hover:border-[#B99A63] hover:text-[#B99A63] disabled:cursor-not-allowed disabled:opacity-50"
       >
         <span className="flex h-3 items-center gap-0.5">
           {[0, 120, 240].map((delay) => (

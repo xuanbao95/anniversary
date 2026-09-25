@@ -28,7 +28,7 @@ export function AnniversaryWheelPage() {
       <header className="relative z-30 flex items-center justify-between border-b border-white/10 pb-2.5">
         <div className="flex items-center gap-3">
           <span className="font-[family-name:var(--font-display)] text-2xl font-bold tracking-tight text-[#FAF6EE]">
-            X<span className="mx-0.5 text-lg text-[#B99A63]">&amp;</span>M
+            B<span className="mx-0.5 text-lg text-[#B99A63]">&amp;</span>N
           </span>
           <span className="hidden h-3.5 w-px bg-white/20 sm:block" />
           <span className="hidden text-[9.5px] font-semibold tracking-[0.24em] text-[#B99A63] sm:block">
@@ -40,14 +40,14 @@ export function AnniversaryWheelPage() {
           <button
             type="button"
             onClick={() => setRsvpOpen(true)}
-            className="rounded-full border border-white/15 bg-[#171615]/70 px-3.5 py-1 text-[8.5px] font-medium tracking-[0.14em] text-[#E8DCC9] transition-colors hover:border-[#B99A63] hover:text-[#B99A63]"
+            className="hidden rounded-full border border-white/15 bg-[#171615]/70 px-3.5 py-1 text-[8.5px] font-medium tracking-[0.14em] text-[#E8DCC9] transition-colors hover:border-[#B99A63] hover:text-[#B99A63] sm:inline-flex"
           >
             GỬI LỜI CHÚC (RSVP)
           </button>
           <button
             type="button"
             onClick={() => setIsPaused(!isPaused)}
-            className="rounded-full border border-white/15 bg-[#171615]/70 px-3 py-1 text-[8.5px] tracking-[0.14em] text-[#C5B8A8] transition-colors hover:border-[#B99A63] hover:text-[#B99A63]"
+            className="hidden rounded-full border border-white/15 bg-[#171615]/70 px-3 py-1 text-[8.5px] tracking-[0.14em] text-[#C5B8A8] transition-colors hover:border-[#B99A63] hover:text-[#B99A63] sm:inline-flex"
           >
             {isPaused ? "▶ TIẾP TỤC" : "⏸ TẠM DỪNG"}
           </button>

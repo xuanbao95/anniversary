@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Be_Vietnam_Pro, Lora, Playfair_Display, Dancing_Script } from "next/font/google";
+import { Be_Vietnam_Pro, Cormorant_Garamond, Lora, Playfair_Display, Dancing_Script } from "next/font/google";
 import "./globals.css";
 
 const beVietnamPro = Be_Vietnam_Pro({
@@ -23,6 +23,13 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
+const garamond = Cormorant_Garamond({
+  weight: ["500", "600"],
+  subsets: ["latin"],
+  variable: "--font-garamond",
+  display: "swap",
+});
+
 const dancingScript = Dancing_Script({
   weight: ["400", "500", "600", "700"],
   subsets: ["vietnamese", "latin"],
@@ -39,7 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="vi"
-      className={`${beVietnamPro.variable} ${lora.variable} ${playfair.variable} ${dancingScript.variable}`}
+      className={`${beVietnamPro.variable} ${lora.variable} ${playfair.variable} ${dancingScript.variable} ${garamond.variable}`}
     >
       <body className="antialiased">{children}</body>
     </html>

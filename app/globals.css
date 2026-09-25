@@ -152,7 +152,3 @@ body {
   width: 100%;
   overflow: hidden;
 }
-
-.film-photo {
-  will-change: transform;
-}
