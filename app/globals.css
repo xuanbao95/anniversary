@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-display: var(--font-display), var(--font-serif), Georgia, serif;
+  --font-serif: var(--font-serif), var(--font-display), Georgia, serif;
+  --font-body: var(--font-body), system-ui, -apple-system, sans-serif;
+  --font-script: var(--font-script), cursive;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background-color: #0c0a09;
+  color: #faf6ee;
+  overflow-x: hidden;
+}
+
+/* Chuyển động xuất hiện mượt mà */
+@keyframes scene-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Chuyển động xoay tròn liên tục từ từ như cuộn phim */
+@keyframes wheel-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-wheel-slow {
+  animation: wheel-rotate 55s linear infinite;
+  transform-origin: 350px 350px;
+  will-change: transform;
+}
+
+.pause-on-hover:hover {
+  animation-play-state: paused;
+}
+
+/* Chuyển động cụng ly rượu vang / champagne */
+@keyframes glass-clink-left {
+  0%, 100% {
+    transform: rotate(-10deg) translate(0, 0);
+  }
+  42% {
+    transform: rotate(-22deg) translate(-2px, -3px);
+  }
+  50% {
+    transform: rotate(-3deg) translate(8px, 0px);
+  }
+  58% {
+    transform: rotate(-14deg) translate(0, 0);
+  }
+  70% {
+    transform: rotate(-10deg) translate(0, 0);
+  }
+}
+
+@keyframes glass-clink-right {
+  0%, 100% {
+    transform: rotate(10deg) translate(0, 0);
+  }
+  42% {
+    transform: rotate(22deg) translate(2px, -3px);
+  }
+  50% {
+    transform: rotate(3deg) translate(-8px, 0px);
+  }
+  58% {
+    transform: rotate(14deg) translate(0, 0);
+  }
+  70% {
+    transform: rotate(10deg) translate(0, 0);
+  }
+}
+
+/* Ánh sao lóe sáng khi cụng ly */
+@keyframes sparkle-burst {
+  0%, 45%, 68%, 100% {
+    opacity: 0;
+    transform: scale(0.2) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.4) rotate(25deg);
+  }
+  56% {
+    opacity: 0.85;
+    transform: scale(1.1) rotate(50deg);
+  }
+}
+
+/* Sóng nhạc mini */
+@keyframes equalize {
+  from {
+    transform: scaleY(0.35);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* Thước phim chạy ngang, lặp khít ở -50% vì track gồm hai bản giống nhau */
+@keyframes film-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.film-track {
+  animation: film-scroll 70s linear infinite;
+  will-change: transform;
+}
+
+.film-track.is-paused {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film-track {
+    animation: none;
+  }
+}
