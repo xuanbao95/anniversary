@@ -3,9 +3,8 @@
 import { useEffect } from "react";
 
 function screens() {
-  const hero = document.getElementById("top");
-  const chapters = [...document.querySelectorAll<HTMLElement>("[id^='chapter-']")];
-  return [hero, ...chapters].filter((node): node is HTMLElement => Boolean(node));
+  const nodes = [...document.querySelectorAll<HTMLElement>(".chapter-screen")];
+  return [...new Set(nodes)];
 }
 
 function fitsOneScreen(node: HTMLElement) {
@@ -16,7 +15,10 @@ export function ChapterPager() {
   useEffect(() => {
     const syncSnap = () => {
       const list = screens();
-      document.documentElement.classList.toggle("chapter-snap", list.length > 1 && list.every(fitsOneScreen));
+      const ready = list.length > 1 && list.every(fitsOneScreen);
+      const flowing = Boolean(document.querySelector("[data-chapter-flow]"));
+      document.documentElement.classList.toggle("chapter-snap", ready && !flowing);
+      document.documentElement.classList.toggle("chapter-snap-soft", ready && flowing);
     };
 
     syncSnap();
@@ -24,6 +26,7 @@ export function ChapterPager() {
     return () => {
       window.removeEventListener("resize", syncSnap);
       document.documentElement.classList.remove("chapter-snap");
+      document.documentElement.classList.remove("chapter-snap-soft");
     };
   }, []);
 

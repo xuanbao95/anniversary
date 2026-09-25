@@ -9,7 +9,7 @@ import { ScrollProgress } from "./scroll-progress";
 
 const chapter = CHAPTER_THREE;
 const VIDEO_AT = 32;
-const PLANNED_VIDEO = 120;
+const PLANNED_VIDEO = 16;
 const MISSING_VIDEO = 4;
 const FINALE_END = 76;
 
@@ -78,10 +78,6 @@ function MemoryFilmThreePlayhead() {
     const amount = segment(time, [end - 0.2, end + 0.8, stillEnd - 0.8, stillEnd], [0, 7, 7, 0]);
     return `blur(${amount}px)`;
   });
-  const controlsOpacity = useTransform(elapsed, (time) => {
-    const end = VIDEO_AT + lenRef.current;
-    return segment(time, [VIDEO_AT, VIDEO_AT + 0.4, end - 0.4, end], [0, 1, 1, 0]);
-  });
 
   const restoreMusic = () => {
     const music = duckedRef.current;
@@ -146,9 +142,22 @@ function MemoryFilmThreePlayhead() {
           phase = "video";
           fallback = 0;
           if (video && !missingRef.current) {
-            video.muted = true;
             video.currentTime = 0;
-            video.play().then(() => setNeedsTap(false)).catch(() => setNeedsTap(true));
+            video.muted = false;
+            setMuted(false);
+            duckedRef.current = duckMusic();
+            video
+              .play()
+              .then(() => {
+                setNeedsTap(false);
+                setMuted(false);
+              })
+              .catch(() => {
+                video.muted = true;
+                setMuted(true);
+                restoreMusic();
+                video.play().then(() => setNeedsTap(false)).catch(() => setNeedsTap(true));
+              });
           }
         }
       } else if (phase === "video") {
@@ -242,8 +251,21 @@ function MemoryFilmThreePlayhead() {
   const startVideo = () => {
     const video = videoRef.current;
     if (!video) return;
-    video.muted = true;
-    video.play().then(() => setNeedsTap(false)).catch(() => setNeedsTap(true));
+    video.muted = false;
+    setMuted(false);
+    duckedRef.current = duckMusic();
+    video
+      .play()
+      .then(() => {
+        setNeedsTap(false);
+        setMuted(false);
+      })
+      .catch(() => {
+        video.muted = true;
+        setMuted(true);
+        restoreMusic();
+        video.play().then(() => setNeedsTap(false)).catch(() => setNeedsTap(true));
+      });
   };
 
   return (
@@ -286,9 +308,9 @@ function MemoryFilmThreePlayhead() {
           ))}
         </Hold>
 
-        <motion.div style={{ opacity: videoOpacity }} className="absolute inset-0 flex flex-col items-center justify-center px-5">
-          <div className="relative w-full max-w-4xl">
-            <motion.div style={{ filter: videoBlur }} className="relative aspect-video overflow-hidden border border-[#B99A63]/80 bg-black">
+        <motion.div style={{ opacity: videoOpacity }} className="absolute inset-0 flex flex-col items-center justify-center px-5 pb-[16vh] pt-[4vh]">
+          <div className="relative aspect-[9/16] h-[min(46dvh,calc(100dvh-18rem))] w-auto max-w-[92vw]">
+            <motion.div style={{ filter: videoBlur }} className="relative h-full overflow-hidden border border-[#B99A63]/80 bg-black">
               <video
                 ref={videoRef}
                 src={chapter.video}
@@ -314,32 +336,29 @@ function MemoryFilmThreePlayhead() {
                 <rect width="100%" height="100%" filter="url(#story-grain-03)" />
               </svg>
             </motion.div>
-            <motion.div
-              style={{ opacity: controlsOpacity }}
-              aria-hidden={!showControls}
-              inert={!showControls}
-              className={`absolute inset-x-0 top-0 aspect-video ${showControls ? "" : "pointer-events-none"}`}
-            >
-              {needsTap && !missing ? (
+            {showControls ? (
+              <div className="absolute inset-0 z-20">
+                {needsTap && !missing ? (
+                  <button
+                    type="button"
+                    onClick={startVideo}
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#B99A63] bg-[#1A1614] px-4 py-2 text-[11px] tracking-[0.28em] text-[#F3E6D0]"
+                  >
+                    PHÁT
+                  </button>
+                ) : null}
                 <button
                   type="button"
-                  onClick={startVideo}
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#B99A63] px-4 py-2 text-[10px] tracking-[0.28em] text-[#F3E6D0]"
+                  onClick={toggleSound}
+                  className="absolute top-3 right-3 rounded-full border border-[#B99A63]/30 bg-[#171615]/80 px-3 py-1 text-[9px] font-medium tracking-[0.16em] text-[#E8DCC9] backdrop-blur-sm transition-all hover:border-[#B99A63] hover:text-[#B99A63]"
                 >
-                  PHÁT
+                  {muted ? "BẬT TIẾNG" : "TẮT TIẾNG"}
                 </button>
-              ) : null}
-              <button
-                type="button"
-                onClick={toggleSound}
-                className="absolute top-3 right-3 rounded-full border border-[#B99A63]/50 bg-black/45 px-3 py-1 text-[9px] tracking-[0.18em] text-[#E8DCC9]"
-              >
-                {muted ? "BẬT TIẾNG" : "TẮT TIẾNG"}
-              </button>
-              <div className="absolute inset-x-0 bottom-0 h-px bg-white/20">
-                <div ref={barRef} className="h-full origin-left bg-[#B99A63]" style={{ transform: "scaleX(0)" }} />
+                <div className="absolute inset-x-0 bottom-0 h-px bg-white/20">
+                  <div ref={barRef} className="h-full origin-left bg-[#B99A63]" style={{ transform: "scaleX(0)" }} />
+                </div>
               </div>
-            </motion.div>
+            ) : null}
           </div>
           <p className="mt-4 text-[11px] tracking-[0.32em] text-[#B99A63] uppercase">{chapter.moment}</p>
         </motion.div>
@@ -476,7 +495,7 @@ function MemoryFilmThreeStatic() {
         ))}
       </section>
       <section className="flex min-h-dvh flex-col items-center justify-center px-5 text-center">
-        <video src={chapter.video} controls playsInline preload="metadata" className="aspect-video w-full max-w-4xl border border-[#B99A63]/80 bg-black" />
+        <video src={chapter.video} controls playsInline preload="metadata" className="aspect-[9/16] h-[min(46dvh,calc(100dvh-18rem))] w-auto max-w-[92vw] border border-[#B99A63]/80 bg-black" />
         <p className="mt-4 text-[11px] tracking-[0.32em] text-[#B99A63] uppercase">{chapter.moment}</p>
       </section>
       <section className="flex min-h-dvh flex-col items-center justify-center px-6 text-center">

@@ -4,81 +4,19 @@ import { useEffect, useRef, useState } from "react";
 
 export function AudioPlayer() {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const resumeRef = useRef(false);
   const [playing, setPlaying] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
-
-  const releaseGesture = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
     audio.volume = 0.28;
-
-    let stopped = false;
-    const detach = () => {
-      window.removeEventListener("pointerdown", onGesture);
-      window.removeEventListener("keydown", onGesture);
-      window.removeEventListener("scroll", onGesture);
-      releaseGesture.current = null;
-    };
-    releaseGesture.current = detach;
-
-    const begin = () => {
-      if (stopped) return;
-      if (!audio.paused) {
-        setPlaying(true);
-        detach();
-        return;
-      }
-      audio
-        .play()
-        .then(() => {
-          if (stopped || audio.paused) return;
-          setPlaying(true);
-          detach();
-        })
-        .catch(() => {
-          // Trình duyệt chặn tự phát khi chưa có thao tác.
-        });
-    };
-
-    const onGesture = (event: Event) => {
-      const target = event.target;
-      if (target instanceof Element && target.closest("[data-audio-toggle]")) return;
-      begin();
-    };
-
-    begin();
-    window.addEventListener("pointerdown", onGesture);
-    window.addEventListener("keydown", onGesture);
-    window.addEventListener("scroll", onGesture, { passive: true });
-
-    const onVisibility = () => {
-      if (document.hidden && !audio.paused) {
-        resumeRef.current = true;
-        audio.pause();
-      } else if (!document.hidden && resumeRef.current) {
-        resumeRef.current = false;
-        audio
-          .play()
-          .then(() => setPlaying(true))
-          .catch(() => setPlaying(false));
-      }
-    };
-
-    document.addEventListener("visibilitychange", onVisibility);
-    return () => {
-      stopped = true;
-      detach();
-      document.removeEventListener("visibilitychange", onVisibility);
-    };
+    audio.pause();
   }, []);
 
   const toggle = async () => {
     const audio = audioRef.current;
     if (!audio || unavailable) return;
-    releaseGesture.current?.();
     if (audio.paused) {
       try {
         await audio.play();
@@ -98,7 +36,7 @@ export function AudioPlayer() {
         ref={audioRef}
         src="/audio/our-story-demo.mp3"
         loop
-        preload="auto"
+        preload="none"
         onError={() => setUnavailable(true)}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}

@@ -5,3 +5,5 @@ export type { ChapterTwo } from "./chapters/chapter-02";
 export { CHAPTER_TWO } from "./chapters/chapter-02";
 export type { ChapterThree } from "./chapters/chapter-03";
 export { CHAPTER_THREE } from "./chapters/chapter-03";
+export type { ChapterFour } from "./chapters/chapter-04";
+export { CHAPTER_FOUR } from "./chapters/chapter-04";

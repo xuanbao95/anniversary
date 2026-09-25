@@ -31,6 +31,10 @@ html.chapter-snap {
   scroll-snap-type: y mandatory;
 }
 
+html.chapter-snap-soft {
+  scroll-snap-type: y proximity;
+}
+
 .chapter-screen {
   scroll-snap-align: start;
   scroll-snap-stop: normal;
