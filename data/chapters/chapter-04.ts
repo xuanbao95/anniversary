@@ -87,7 +87,7 @@ export const CHAPTER_FOUR: ChapterFour = {
   id: "04",
   nextId: "05",
   title: "THE DAY WE BECAME US",
-  nextTitle: "LIFE TOGETHER",
+  nextTitle: "OUR LITTLE MIRACLE",
   cue: "Cuộn tiếp",
   top: "Quay lại đầu trang",
   opening: {
@@ -236,7 +236,7 @@ export const CHAPTER_FOUR: ChapterFour = {
   },
   next: {
     kicker: "CHAPTER 05",
-    title: "LIFE TOGETHER",
-    subtitle: "Và rồi, forever trở thành những ngày bình thường của chúng ta.",
+    title: "OUR LITTLE MIRACLE",
+    subtitle: "Từ một nhịp tim nhỏ, câu chuyện của chúng ta lớn hơn hai người.",
   },
 };
